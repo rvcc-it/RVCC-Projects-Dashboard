@@ -17,7 +17,9 @@ function createPool() {
   return new Pool({
     connectionString: process.env.DATABASE_URL,
     ssl: process.env.DATABASE_SSL === "true" ? { rejectUnauthorized: false } : undefined,
-    max: Number(process.env.DATABASE_POOL_MAX || 10),
+    // Keep this small: Supabase poolers allow only ~15 connections in total, shared by every running copy of the app.
+    max: Number(process.env.DATABASE_POOL_MAX || 5),
+    idleTimeoutMillis: 10_000, // give idle connections back quickly
   });
 }
 export const pool: Pool = (globalThis.__rvccPool ??= createPool());
