@@ -31,6 +31,7 @@ export interface Db {
   query<T extends QueryResultRow = Row>(text: string, params?: unknown[]): Promise<{ rows: T[]; rowCount: number }>;
 }
 
+
 function wrap(client: PoolClient): Db {
   return {
     async query(text: string, params?: unknown[]) {
